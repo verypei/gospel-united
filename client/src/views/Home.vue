@@ -1,18 +1,31 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+    <div>
+        <h1>pray request</h1>
+        <div v-for="data in this.$store.state.pray" :key="data.id">
+            <prayList :data="data"></prayList>
+        </div>
+        <!-- modal -->
+        
+    </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import router from "../router";
+import prayList from "../components/prayCard";
+const token = localStorage.getItem("token");
 
 export default {
-  name: 'Home',
-  components: {
-    HelloWorld
-  }
+    components:{
+        prayList
+    },
+    created(){
+        console.log("masuk created home page");
+        if(!token){
+            router.push("/login");
+        }
+        this.$store.dispatch("getAllPray");
+    }
 }
 </script>
+
+

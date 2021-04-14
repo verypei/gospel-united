@@ -1,20 +1,21 @@
 
-const {toDos} = require('../models')
+const {Prays} = require('../models')
 
 //authorization digunakan untuk mencari data todo yg user id nya sama dengan org yg sedang login
 
 function authorization(req, res, next){
     
     let id = req.params.id
-    toDos.findOne({
+    Prays.findOne({
         where: {id:id}
     })
     .then(data => {
         if(!data){
+            // console.log("masuk ke auth ");
             res.status(404).json({message:"data not found"})
         }
         else{
-            if(data.userid===req.user.id){
+            if(data.user_id===req.user.id){
                 next()
             }
             else{

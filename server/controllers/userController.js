@@ -18,7 +18,9 @@ class userController{
         Users.create(obj)
         .then(data=>{
             console.log("masukke data register---->");
-            res.status(201).json(data)
+            let token = jwt.sign({id: data.id, username:data.username, email: data.email}, process.env.JWT_SECRET)//????????????????
+            res.status(201).json({token: token})
+            // res.status(201).json(data)
         })
         .catch(err=>{
             console.log(err);
