@@ -13,19 +13,24 @@ export default new Vuex.Store({
   },
   mutations: {
     GET_ALL_PRAY(state,payload){
-      // console.log(payload,"masuk ke mutation---->>>>>");
-      state.pray = payload;
+      state.pray = payload.sort((a,b)=>{return a.id - b.id});
+    },
+    ADD_PRAY(state, payload){
+      state.pray.push(payload)
     },
     DELETE_PRAY(state,payload){
       let result = state.pray.filter((el)=>{return el.id !== payload})
       state.pray = result;
     },
     GET_PRAY_BY_ID(state,payload){
-      // console.log(payload,"---payload pray by id");
       state.prayById = payload
     },
     UPDATE_PRAY(state,payload){
-      console.log(payload,"from mutation store");
+      for (let i = 0; i < state.pray.length; i++) {
+          if(state.pray.id === payload.id){
+            state.pray[i].pray = payload.data
+          }
+      }
     }
   },
   actions: {
@@ -37,8 +42,22 @@ export default new Vuex.Store({
         headers: {token}
       })
       .then(resp=>{
-        // console.log(resp.data,'masuk ke then===>..');
         context.commit("GET_ALL_PRAY",resp.data);
+      })
+      .catch(err=>{
+        console.log(err,"from state action get prays");
+      })
+    },
+    addPray(context,pray){
+      console.log("state action add",{pray});
+      axios({
+        method: "POSt",
+        url: `${baseUrl}/prays`,
+        data: {pray},
+        headers: {token}
+      })
+      .then(resp=>{
+        context.commit("ADD_PRAY",resp.data);
       })
       .catch(err=>{
         console.log(err,"from state action get prays");
@@ -61,24 +80,21 @@ export default new Vuex.Store({
         url: `${baseUrl}/prays/${id}`,
         headers: {token}
       }).then(resp=>{
-        // console.log(resp.data,'----resp data from actions');
         context.commit("GET_PRAY_BY_ID",resp.data)
       }).catch(err=>{
         console.log(err,"from get pray by id state actions");
       })
     },
     updatePray(context,payload){
-      // console.log(payload.data,'----resp data edit actions',payload.id,";;;;>>>>>>");
       let pray = payload.data
       let id = payload.id
-      console.log(pray,"---",id);
       axios({
         method: "PUT",
         url: `${baseUrl}/prays/${id}`,
         data: {pray},
         headers: {token}
       }).then(resp=>{
-        context.commit("UPDATE_PRAY",resp)
+        context.commit("UPDATE_PRAY",payload)
       }).catch(err=>{
         console.log(err,"from get pray by id state actions");
       })

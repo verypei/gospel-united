@@ -43,11 +43,24 @@ class Controller{
             pray:req.body.pray,
             user_id:req.user.id
         }
-        console.log(obj,"-obj for pray");
+        let userName = ""
+        Users.findOne({where:{id:req.user.id}})
+        .then(dataUser=>{
+            userName = dataUser.user_name
+            console.log(userName,"from add pray in controllers");
+        })
+        .catch(err=>{
+            console.log(err,"from add pray in controllers");
+        })
         Prays.create(obj)
         .then(data=>{
-            console.log(data,"=====>");
-            res.status(201).json({data})
+            
+            const newData = {
+                id : data.id,
+                pray : data.pray,
+                user_name : userName
+            }
+            res.status(201).json(newData)
         })
         .catch(err=>{
             if(err.errors){

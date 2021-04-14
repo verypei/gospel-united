@@ -24,20 +24,19 @@
                     style="width='auto'"
                     >{{prayForEdit}}</b-form-input>
             </div>
-            <b-button class="mt-3" variant="outline-danger" block @click="cancelEdit()">cancel</b-button>
             <b-button class="mt-2" variant="outline-warning" block  @click="editPraySubmit(prayForEdit,prayIdForEdit)">edit</b-button>
             </b-modal>
         </div>
     </div>
 </template>
 <script> 
+import router from "../router"
     export default {
         props:["data"],
         data(){
             return {
                 prayForEdit :"",
                 prayIdForEdit :0,
-
             }
         },
         methods:{
@@ -45,13 +44,10 @@
                 this.$store.dispatch("deletePray",id);
             },
             async getPrayById(id){
-                console.log("get pray");
                 await this.$store.dispatch("getPrayById",id);
             },
             async setPrayById(){
-                console.log("set pray");
-                let result = await this.$store.state.prayById
-                console.log(result,"result from set pray");
+                let result = await this.$store.state.prayById;
                 return result;
             },
             async editPray(id){
@@ -60,18 +56,14 @@
                 setTimeout(async() => {
                     this.prayForEdit = this.$store.state.prayById.pray
                     this.prayIdForEdit = this.$store.state.prayById.id
-                    console.log(this.prayForEdit,"-----> after disptch",this.prayIdForEdit,";;;;;;");
                     await this.$refs['my-modal'].show()
                 }, 1000);
                 console.log("ending");
             },
-            cancelEdit(){
-                location.Reload()
-            },
-            editPraySubmit(data,id){
-                console.log(data,id,"from submit edit pray------>>>>>>>>");
-                this.$store.dispatch("updatePray",{data,id});
-                
+            async editPraySubmit(data,id){
+                await this.$store.dispatch("updatePray",{data,id});
+                await this.$refs['my-modal'].hide();
+                await router.push("/home");
             }
         }
     }
