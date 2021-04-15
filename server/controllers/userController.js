@@ -17,8 +17,7 @@ class userController{
 
         Users.create(obj)
         .then(data=>{
-            console.log("masukke data register---->");
-            let token = jwt.sign({id: data.id, username:data.username, email: data.email}, process.env.JWT_SECRET)//????????????????
+            let token = jwt.sign({id: data.id, user_name:data.user_name, email: data.email}, process.env.JWT_SECRET)//????????????????
             res.status(201).json({token: token})
             // res.status(201).json(data)
         })
@@ -40,8 +39,9 @@ class userController{
             if(!data){
                 res.status(400).json('email wrong')
             } else {
+                console.log("from login")
                 if(bcrypt.compareSync(req.body.password, data.password)){
-                    let token = jwt.sign({id: data.id, username:data.username, email: data.email}, process.env.JWT_SECRET)//????????????????
+                    let token = jwt.sign({id: data.id, user_name:data.user_name, email: data.email}, process.env.JWT_SECRET)//????????????????
                     res.status(200).json({token: token})
                 } else {
                     res.status(400).json('password wrong')

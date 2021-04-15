@@ -31,11 +31,12 @@ export default {
   },
   methods: {
     login(e) {
-      e.preventDefault()
+      e.preventDefault();
       let obj = {
         email : this.emailLogin,
         password : this.passwordLogin
       }
+      console.log("masuk ke login",obj);
       axios({
         method : "POST",
         url : `${baseUrl}/users/login`,

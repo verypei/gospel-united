@@ -10,7 +10,7 @@
                     <fa icon="trash" size="2x" style="padding-left:10px;"  @click="deletePray(data.id)"/>
                     <fa icon="edit" size="2x" style="padding-left:10px;" v-b-modal.modal-1 @click="editPray(data.id)"/>
                 </span>
-                <footer><em>~{{data.user_name}}~</em></footer>
+                <footer><em>~{{data.User.user_name}}~</em></footer>
             </div>
         </div>
         <!-- modal -->
@@ -58,7 +58,6 @@ import router from "../router"
                     this.prayIdForEdit = this.$store.state.prayById.id
                     await this.$refs['my-modal'].show()
                 }, 1000);
-                console.log("ending");
             },
             async editPraySubmit(data,id){
                 await this.$store.dispatch("updatePray",{data,id});

@@ -1,5 +1,6 @@
 <template>
     <div>
+      <b-button @click="logout()">Logout</b-button> 
         <h1>pray request</h1>
         <!-- button add pray -->
         <b-button data-toggle="my-modal" @click="addPrayModalShow()">add pray</b-button>
@@ -43,6 +44,7 @@ export default {
         if(!token){
             router.push("/login");
         }
+        console.log("masuk ke created");
         this.$store.dispatch("getAllPray");
     },
     methods:{
@@ -53,6 +55,10 @@ export default {
             await this.$refs['my-modal'].hide();
             const data = this.newPray;
             this.$store.dispatch("addPray",data);
+        },
+        async logout(){
+            localStorage.removeItem("token");
+            await router.push("/login")
         }
     }
 }

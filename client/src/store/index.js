@@ -13,6 +13,7 @@ export default new Vuex.Store({
   },
   mutations: {
     GET_ALL_PRAY(state,payload){
+      console.log("masuk ke mutations");
       state.pray = payload.sort((a,b)=>{return a.id - b.id});
     },
     ADD_PRAY(state, payload){
@@ -35,13 +36,13 @@ export default new Vuex.Store({
   },
   actions: {
     getAllPray(context){
-      console.log("masuk ke actions");
       axios({
         method: "GET",
         url: `${baseUrl}/prays`,
         headers: {token}
       })
       .then(resp=>{
+        console.log("masuk ke actions get prays");
         context.commit("GET_ALL_PRAY",resp.data);
       })
       .catch(err=>{
@@ -49,7 +50,6 @@ export default new Vuex.Store({
       })
     },
     addPray(context,pray){
-      console.log("state action add",{pray});
       axios({
         method: "POSt",
         url: `${baseUrl}/prays`,

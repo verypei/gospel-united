@@ -6,7 +6,7 @@ const getAllPrayHelper = require("../helper/getAllPrayHelper")
 class Controller{
 
     static getPrays(req,res){
-        // console.log(":masuk ke get prays =====>");
+        console.log(req.user.id,"masuk ke get prays =====>");
         Prays.findAll({
             include: [{
                 model: Users,
@@ -17,18 +17,19 @@ class Controller{
             // }
         })
         .then(data=>{
-            const newData = getAllPrayHelper(data)
-            res.status(200).json(newData)
+            // const newData = getAllPrayHelper(data);
+            // console.log(newData,"--data from get prays");
+            res.status(200).json(data);
         })
         .catch(err=>{
             console.log(err,"--from get all pray--");
-            res.status(500).json(err)
+            res.status(500).json(err);
         })
     }
 
     static getPrayById(req,res){
         console.log("masuk get pray id");
-        let id = req.params.id
+        let id = req.params.id;
         Prays.findOne({where:{id:id}})
         .then(data=>{
             res.status(200).json({id:data.id,pray:data.pray})
@@ -43,6 +44,7 @@ class Controller{
             pray:req.body.pray,
             user_id:req.user.id
         }
+        console.log(obj);
         let userName = ""
         Users.findOne({where:{id:req.user.id}})
         .then(dataUser=>{
@@ -124,4 +126,3 @@ class Controller{
     }
 }
 module.exports=Controller;
-

@@ -49,7 +49,6 @@ export default{
         url : `${baseUrl}/users/register`,
         data : obj
       }).then(resp=>{
-        // console.log(resp.data,"=====> client");
         localStorage.setItem("token",resp.data.token);
         router.push("/home");
       }).catch(err=>{
