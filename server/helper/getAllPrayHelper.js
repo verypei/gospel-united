@@ -59,17 +59,24 @@
 //     }
 //     return `${day}-${date}-${month}-${year}`
 // }
-function getAllPrayHelper(arr){
+function getAllPrayHelper(arr, supportData){
+    // console.log(arr,"-----",supportData,"---->>>>>");
     let result = [];
     for (let i = 0; i < arr.length; i++) {
-        // let day = arr[i].createdAt.slice(8,10);
-        // let year = arr[i].createdAt.slice(0,4);
-
+        // console.log(supportData,"---->>>>",arr[i].id,"::::::--->>>>");
         let obj = {
             id : arr[i].id,
             pray : arr[i].pray,
-            user_name : arr[i].User.user_name
-            // date : setDate(arr[i].createdAt)
+            up_lifting : arr[i].up_lifting,
+            support: arr[i].support,
+            user_name : arr[i].User.user_name,
+            supportedBy : []
+        }
+        for (let j = 0; j < supportData.length; j++) {
+            if(supportData[j].pray_id === arr[i].id){
+                // console.log("masuk ke if");
+                obj.supportedBy.push(supportData[j].user_id);
+            }
         }
         result.push(obj);
     }

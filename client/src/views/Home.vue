@@ -1,6 +1,6 @@
 <template>
     <div>
-      <b-button @click="logout()">Logout</b-button> 
+        <navbar />
         <h1>pray request</h1>
         <!-- button add pray -->
         <b-button data-toggle="my-modal" @click="addPrayModalShow()">add pray</b-button>
@@ -23,29 +23,49 @@
                 <b-button class="mt-2" variant="outline-warning" block  @click="addPraySubmit()">add</b-button>
             </b-modal>
         </div>
+
+        <!-- modal edit -->
+        <div>
+            <b-modal ref="edit-pray-modal" hide-footer title="Using Component Methods"  v-model="modalShow">
+            <div class="d-block text-center">
+                    <b-form-input
+                    id="newPrayInput"
+                    v-model="prayForEdit"
+                    required
+                    style="width='auto'"
+                    >{{prayForEdit}}</b-form-input>
+            </div>
+            <b-button class="mt-2" variant="outline-warning" block  @click="editPraySubmit(prayForEdit,prayIdForEdit)">edit</b-button>
+            </b-modal>
+        </div>
+        <!-- end -->
     </div>
 </template>
 
 <script>
 import router from "../router";
 import prayList from "../components/prayCard";
-const token = localStorage.getItem("token");
+import navbar from "../components/navbar"
 
 export default {
     components:{
-        prayList
+        prayList,
+        navbar
     },
     data(){
         return {
-            newPray : ""
+            newPray : "",
+            prayContent: ""
         }
     },
-    created(){
+    async created(){
+        const token = await localStorage.getItem("token");
+        console.log(token,"from created home client");
         if(!token){
-            router.push("/login");
+            await router.push("/login");
         }
-        console.log("masuk ke created");
-        this.$store.dispatch("getAllPray");
+        // console.log("masuk ke created");
+        await this.$store.dispatch("getAllPray");
     },
     methods:{
         async addPrayModalShow(){
@@ -56,9 +76,28 @@ export default {
             const data = this.newPray;
             this.$store.dispatch("addPray",data);
         },
-        async logout(){
-            localStorage.removeItem("token");
-            await router.push("/login")
+        async editPraySubmit(data,id){
+            await this.$store.dispatch("updatePray",{data,id});
+            await this.$refs['edit-pray-modal'].hide();
+        },
+    },
+    computed:{
+        modalShow(){//show modal
+            return Object.keys(this.$store.state.prayById).length > 0
+        },
+
+        prayIdForEdit(){
+            return this.$store.state.prayById.id
+        },
+
+        prayForEdit: {
+            get(){
+                if(this.prayContent) return this.prayContent
+                else return this.$store.state.prayById.pray
+            },
+            set(value){
+                this.prayContent = value
+            }
         }
     }
 }

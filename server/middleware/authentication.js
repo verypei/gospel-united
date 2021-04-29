@@ -1,11 +1,9 @@
-//ketika kita login kita mendapatkan token,lalu token tersebut dimassukan ke req.headers,lalu dgn jwt verify 
-// kita kan mendaptkan user data \
-require("dotenv").config()
+require("dotenv").config();
 const jwt = require("jsonwebtoken");
 
 const Authentication = (req,res,next)=>{
   try{
-      const {token} = req.headers
+      const {token} = req.headers;
       if(!token){
         res.status(404).json({message:"token not found"})
       }

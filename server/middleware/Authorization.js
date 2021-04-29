@@ -11,7 +11,6 @@ function authorization(req, res, next){
     })
     .then(data => {
         if(!data){
-            // console.log("masuk ke auth ");
             res.status(404).json({message:"data not found"})
         }
         else{

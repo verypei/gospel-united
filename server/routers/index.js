@@ -2,11 +2,12 @@ const router = require('express').Router()
 
 const usersRoutes = require('./userRouter');
 const prayRoutes = require('./prayRouter');
-// const apiROUTES = require("./apiRouter");
+const supportRoutes = require("./support");
+const profilesRoutes = require("./profiles");
 
 router.use('/users', usersRoutes);
 router.use('/prays',prayRoutes);
-// router.use('/weather', apiROUTES);
-
+router.use("/support",supportRoutes);
+router.use("/profiles",profilesRoutes);
 
 module.exports = router

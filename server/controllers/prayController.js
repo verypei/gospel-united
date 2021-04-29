@@ -1,34 +1,42 @@
 require("dotenv").config()
-const {Prays, Users} = require("../models");
-const getAllPrayHelper = require("../helper/getAllPrayHelper")
+const {Prays, Users, Supports} = require("../models");
+const getAllPrayHelper = require("../helper/getAllPrayHelper");
 // const axios = require("axios")
 
 class Controller{
 
     static getPrays(req,res){
-        console.log(req.user.id,"masuk ke get prays =====>");
+
+        // get support
+        let arrSupport = [];
+        Supports.findAll()
+        .then(dataSupport=>{
+            for (let i = 0; i < dataSupport.length; i++) {
+                arrSupport.push(dataSupport[i].dataValues)
+            }
+        })
+        .catch(err=>{
+            res.status(500).json(err);
+        })
+
+        // get all pray
         Prays.findAll({
             include: [{
                 model: Users,
                 required: true
-            }],
-            // where: {
-            //     user_id: req.user.id
-            // }
+            }]
         })
         .then(data=>{
-            // const newData = getAllPrayHelper(data);
-            // console.log(newData,"--data from get prays");
-            res.status(200).json(data);
+            let newData = getAllPrayHelper(data, arrSupport);
+            res.status(200).json(newData);
         })
         .catch(err=>{
-            console.log(err,"--from get all pray--");
             res.status(500).json(err);
         })
     }
 
     static getPrayById(req,res){
-        console.log("masuk get pray id");
+        // console.log("masuk get pray id");
         let id = req.params.id;
         Prays.findOne({where:{id:id}})
         .then(data=>{
@@ -44,7 +52,6 @@ class Controller{
             pray:req.body.pray,
             user_id:req.user.id
         }
-        console.log(obj);
         let userName = ""
         Users.findOne({where:{id:req.user.id}})
         .then(dataUser=>{
@@ -54,9 +61,9 @@ class Controller{
         .catch(err=>{
             console.log(err,"from add pray in controllers");
         })
+
         Prays.create(obj)
         .then(data=>{
-            
             const newData = {
                 id : data.id,
                 pray : data.pray,
@@ -111,6 +118,7 @@ class Controller{
 
     static deletePray(req,res){
         let id = req.params.id;
+        // console.log(req.user.id,"login id");
         Prays.destroy({where:{id:id}})
         .then(data=>{
             if(data){
@@ -122,7 +130,7 @@ class Controller{
         })
         .catch(err=>{
             res.status(500).json(err)
-        })
+        })          
     }
 }
 module.exports=Controller;

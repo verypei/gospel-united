@@ -1,5 +1,6 @@
 <template>
   <div>
+      <navbar />
       <form @submit="login">
 
         <div class="mb-3">
@@ -21,8 +22,12 @@
 const baseUrl = "http://localhost:3000"
 import axios from "axios"
 import router from "../router"
+import navbar from "../components/navbarLogin"
 
 export default {
+  components :{
+    navbar
+  },
   data() {
     return {
       emailLogin : "",
@@ -42,7 +47,9 @@ export default {
         url : `${baseUrl}/users/login`,
         data : obj
       }).then(resp=>{
-        localStorage.setItem("token",resp.data.token)
+        localStorage.setItem("token",resp.data.token);
+        localStorage.setItem("user_name",resp.data.user_name);
+        localStorage.setItem("id",resp.data.id);
         router.push("/home");
       }).catch(err=>{
         console.log(err,"====error from login client");

@@ -3,7 +3,7 @@ import VueRouter from 'vue-router'
 import Register from '../views/Register.vue'
 import Login from '../views/Login.vue'
 import Home from '../views/Home.vue'
-import Edit from '../views/editPray.vue'
+import Profile from "../views/Profile.vue"
 
 Vue.use(VueRouter)
 
@@ -24,9 +24,9 @@ const routes = [
     component: Home
   },
   {
-    path: '/editPray',
-    name: 'Edit',
-    component: Edit
+    path: '/profile',
+    name: 'Profile',
+    component: Profile
   }
   // {
   //   path: '/about',

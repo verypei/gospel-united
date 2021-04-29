@@ -1,5 +1,6 @@
 <template>
   <div class="home">
+    <navbar />
     <form @submit="register">
 
         <div class="mb-3">
@@ -17,7 +18,9 @@
           <input type="password" class="form-control" v-model="passwordInput">
         </div>
 
+
         <button type="submit" class="btn btn-primary">Submit</button>
+        <div><h2 color=red>{{error}}</h2></div>
 
       </form>
   </div>
@@ -27,13 +30,18 @@
 const baseUrl = "http://localhost:3000"
 import axios from "axios"
 import router from "../router"
+import navbar from "../components/navbarLogin"
 
 export default{
-  data  () {
+  components :{
+    navbar
+  },
+  data() {
     return {
       emailInput : "",
       usernameInput : "",
-      passwordInput : ""
+      passwordInput : "",
+      error : ""
     }
   },
   methods : {
@@ -49,9 +57,13 @@ export default{
         url : `${baseUrl}/users/register`,
         data : obj
       }).then(resp=>{
-        localStorage.setItem("token",resp.data.token);
-        router.push("/home");
+          // localStorage.setItem("id",resp.data.id);
+          localStorage.setItem("token",resp.data.token);
+          localStorage.setItem("user_name",resp.data.user_name);
+          localStorage.setItem("id",resp.data.id);
+          router.push("/home");
       }).catch(err=>{
+        this.error = "email already used"
         console.log(err,"====error from register client");
       })
     }
