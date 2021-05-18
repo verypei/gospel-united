@@ -1,13 +1,13 @@
 
-const {Prays} = require('../models')
+const {Profiles} = require('../models')
 
 //authorization digunakan untuk mencari data todo yg user id nya sama dengan org yg sedang login
 
 function authorization(req, res, next){
     
     let id = req.params.id
-    Prays.findOne({
-        where: {id:id}
+    Profiles.findOne({
+        where: {user_id:req.user.id}
     })
     .then(data => {
         if(!data){

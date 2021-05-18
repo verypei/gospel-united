@@ -2,13 +2,15 @@ const express = require("express");
 const router = express.Router();
 const authentication = require("../middleware/authentication");
 const profileControllers = require("../controllers/profileControllers.js");
-const authorization = require("../middleware/Authorization");
+const upload = require("../helper/multer.js");
 
 router.get("/",authentication,profileControllers.getProfiles);
 
-// router.post("/",authentication,profileControllers.setProfileId);
+router.get("/:id",authentication,profileControllers.getOtherProfiles);
 
-router.put("/",authentication,profileControllers.updateProfile);
-
+router.put("/",authentication,(req,res,next)=>{
+    console.log(req.body); 
+    next()
+},profileControllers.updateProfile);
 
 module.exports=router;

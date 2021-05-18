@@ -17,10 +17,10 @@
             <b-nav-item href="#" disabled id="welcome-name"><em>Shalom</em> ~{{nameToUpperCase}}~</b-nav-item>
             <b-nav-item-dropdown text="" right>
                 <b-dropdown-item href="#">hebrew</b-dropdown-item>
-                <b-dropdown-item href="#">pray</b-dropdown-item>
+                <b-dropdown-item href="#"><router-link  to="/home">pray</router-link></b-dropdown-item>
                 <b-dropdown-item href="#">contributor</b-dropdown-item>
                 <b-dropdown-item href="#">articles</b-dropdown-item>
-                <b-dropdown-item ><router-link  to="/profile">profile</router-link></b-dropdown-item>
+                <b-dropdown-item ><router-link  to="/userProfile">profile</router-link></b-dropdown-item>
                 <b-dropdown-item href="#" @click="logout()">sign out</b-dropdown-item>
             </b-nav-item-dropdown>
         </b-navbar-nav>

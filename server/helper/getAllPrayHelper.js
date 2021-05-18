@@ -67,6 +67,7 @@ function getAllPrayHelper(arr, supportData){
         let obj = {
             id : arr[i].id,
             pray : arr[i].pray,
+            user_id: arr[i].user_id,
             up_lifting : arr[i].up_lifting,
             support: arr[i].support,
             user_name : arr[i].User.user_name,

@@ -12,13 +12,13 @@
         <div>
             <b-modal ref="my-modal" hide-footer title="Using Component Methods">
                 <div class="d-block text-center">
-                        <b-form-input
+                        <b-form-textarea
                         id="newPrayInput"
                         v-model="newPray"
                         required
                         style="width='auto'"
                         placeholder="add your pray here"
-                        ></b-form-input>
+                        ></b-form-textarea>
                 </div>
                 <b-button class="mt-2" variant="outline-warning" block  @click="addPraySubmit()">add</b-button>
             </b-modal>
@@ -27,15 +27,15 @@
         <!-- modal edit -->
         <div>
             <b-modal ref="edit-pray-modal" hide-footer title="Using Component Methods"  v-model="modalShow">
-            <div class="d-block text-center">
-                    <b-form-input
-                    id="newPrayInput"
-                    v-model="prayForEdit"
-                    required
-                    style="width='auto'"
-                    >{{prayForEdit}}</b-form-input>
-            </div>
-            <b-button class="mt-2" variant="outline-warning" block  @click="editPraySubmit(prayForEdit,prayIdForEdit)">edit</b-button>
+                <div class="d-block text-center">
+                        <b-form-textarea
+                        id="newPrayInput"
+                        v-model="prayForEdit"
+                        required
+                        style="width='auto'"
+                        >{{prayForEdit}}</b-form-textarea>
+                </div>
+                <b-button class="mt-2" variant="outline-warning" block  @click="editPraySubmit(prayForEdit,prayIdForEdit)">edit</b-button>
             </b-modal>
         </div>
         <!-- end -->
@@ -46,6 +46,7 @@
 import router from "../router";
 import prayList from "../components/prayCard";
 import navbar from "../components/navbar"
+const token = localStorage.getItem("token");
 
 export default {
     components:{
@@ -59,13 +60,11 @@ export default {
         }
     },
     async created(){
-        const token = await localStorage.getItem("token");
         console.log(token,"from created home client");
         if(!token){
-            await router.push("/login");
+            router.push("/login");
         }
-        // console.log("masuk ke created");
-        await this.$store.dispatch("getAllPray");
+        this.$store.dispatch("getAllPray");
     },
     methods:{
         async addPrayModalShow(){

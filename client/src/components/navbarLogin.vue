@@ -1,6 +1,6 @@
 <template>
     <div>
-        <b-navbar toggleable="lg" type="dark" variant="light">
+        <b-navbar toggleable="lg" type="dark" variant="dark">
             <b-navbar-brand href="#">Gospel-United</b-navbar-brand>
 
             <b-navbar-nav class="navbar-nav">

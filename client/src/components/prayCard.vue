@@ -1,9 +1,11 @@
 <template>
     <div class="bigCard">
         <!-- card -->
-        <div class="card">
+        <div class="card" >
             <div class="img">
-                <b-avatar></b-avatar>
+            <!-- <div class="img" @click="getProfile(data.user_id)"> -->
+                <b-avatar >
+                </b-avatar> 
         </div>
 
             <div class="card-body">
@@ -33,8 +35,15 @@
     </div>
 </template> 
 <script> 
+import router from '../router';
+import vue2Dropzone from 'vue2-dropzone'
+import 'vue2-dropzone/dist/vue2Dropzone.min.css'
+
     export default {
         props:["data"],
+        components:{
+            vueDropzone: vue2Dropzone
+        },
         data(){
             return {
                 prayForEdit :"",
@@ -52,7 +61,7 @@
         methods:{
             dataSupport(){
                 if(this.data.support === 0){
-                    this.dataSupportZero = false;
+                    return ""
                 }
                 else{
                     return this.data.support;
@@ -60,22 +69,11 @@
             },
             truncation(){
                 // hide show delete edit button just for the login user
-                let name = localStorage.getItem("user_name")
-                // console.log(name,"masuk ke computed",this.data.user_name);
+                let name = localStorage.getItem("user_name");
                 if(this.data.user_name === name){
                     this.deleteButton = true
                     this.editButton = true
                 }
-
-                // arrow and support
-                // let id = localStorage.getItem("id")
-                // let arr = this.data.supportedBy
-                // console.log(arr,"------",id);
-                // if(arr.includes(Number(id))){
-                //     console.log("masuk ke logik arrow and support");
-                //     this.support = true
-                    // this.$refs.supportIcon.style.color = "blue"
-                // }
 
                 //truncation text
                 if(this.data.pray.length > 100){
@@ -120,12 +118,28 @@
                     this.support = true;
                     this.$refs.supportIcon.style.color = "blue";
                     this.$store.dispatch("addSupport",{id,user_id});
+                    this.dataSupport();
                 }
                 else{
                     this.support = false;
                     this.$refs.supportIcon.style.color = "grey";
                     this.$store.dispatch("lessSupport",{id,user_id});
+                    this.dataSupport();
                 }
+            },
+            getProfile(id){
+                let name = this.data.user_name
+                let loginUser = localStorage.getItem("user_name");
+                if(name === loginUser){
+                    // console.log("masuk ke get profile data sama", id);
+                    this.$store.dispatch("getProfile");
+                    router.push("/userProfile");
+                }  
+                else{
+                    // console.log("masuk ke else untuk ke profile lain");
+                    this.$store.dispatch("getOtherProfile",id);
+                    router.push("/otherProfile");
+                }              
             }
         }            
     }

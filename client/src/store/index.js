@@ -9,7 +9,9 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     pray:[],
-    prayById:{}
+    prayById:{},
+    profile:{},
+    otherProfile:{}
   },
   mutations: {
     GET_ALL_PRAY(state,payload){
@@ -34,10 +36,11 @@ export default new Vuex.Store({
       }
     },
     ADD_SUPPORT(state, payload){
+      console.log(state.pray,"data from add support client mutation");
       for (let i = 0; i < state.pray.length; i++) {
         if(state.pray[i].id === payload.id){
           state.pray[i].support++
-          state.pray.supportedBy.push(payload.user_id);
+          state.pray[i].supportedBy.push(payload.user_id);
         }
       }
     },
@@ -45,9 +48,18 @@ export default new Vuex.Store({
       for (let i = 0; i < state.pray.length; i++) {
         if(state.pray[i].id === payload.id){
           state.pray[i].support--;
-          state.pray.supportedBy.filter((el)=>{return el != payload.user_id});
+          state.pray[i].supportedBy.filter((el)=>{return el != payload.user_id});
         }
       }
+    },
+    GET_PROFILE(state, payload){
+      state.profile = payload;
+    },
+    UPDATE_PROFILE(state, payload){
+      state.profile = payload;
+    },
+    GET_OTHER_PROFILE(state, payload){
+      state.otherProfile = payload;
     }
   },
   actions: {
@@ -59,7 +71,7 @@ export default new Vuex.Store({
         headers: {token}
       })
       .then(resp=>{
-        // console.log("masuk ke actions get prays");
+        console.log("masuk ke actions get prays");
         context.commit("GET_ALL_PRAY",resp.data);
       })
       .catch(err=>{
@@ -117,7 +129,7 @@ export default new Vuex.Store({
       })
     },
     addSupport(context, payload){
-      console.log(payload,"from store add support");
+      // console.log(payload,"from store add support");
       axios({
         method: "PUT",
         url: `${baseUrl}/support/add/${payload.id}`,
@@ -128,15 +140,55 @@ export default new Vuex.Store({
         console.log(err,"from get pray by id state actions");
       })
     },
+
     lessSupport(context, payload){
+      console.log(payload,"from less support client actions");
       axios({
-        method: "GET",
-        url: `${baseUrl}/prays/support/less/${payload.id}`,
+        method: "PUT",
+        url: `${baseUrl}/support/less/${payload.id}`,
         headers: {token}
       }).then(resp=>{
         context.commit("LESS_SUPPORT",payload)
       }).catch(err=>{
         console.log(err,"from get pray by id state actions");
+      })
+    },
+    getProfile(context){
+      console.log("masuk ke get profile actions");
+      axios({
+        method: "GET",
+        url: `${baseUrl}/profiles`,
+        headers: {token}
+      }).then(resp=>{
+        console.log(resp.data,"data profile client actions");
+        context.commit("GET_PROFILE",resp.data);
+      }).catch(err=>{
+        console.log(err,"from get profile state actions");
+      })
+    },
+    editProfile(context, payload){
+      axios({
+        method: "PUT",
+        url: `${baseUrl}/profiles`,
+        data : payload,
+        headers: {token}
+      }).then(resp=>{
+        console.log(resp.data,"data profile client actions");
+        context.commit("UPDATE_PROFILE",payload);
+      }).catch(err=>{
+        console.log(err,"from get profile state actions");
+      })
+    },
+    getOtherProfile(context, payload){
+      axios({
+        method: "GET",
+        url: `${baseUrl}/profiles/${payload}`,
+        headers: {token}
+      }).then(resp=>{
+        console.log(resp.data,"data profile client actions");
+        context.commit("GET_OTHER_PROFILE",resp.data);
+      }).catch(err=>{
+        console.log(err,"from get profile state actions");
       })
     }
   },

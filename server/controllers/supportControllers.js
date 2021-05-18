@@ -18,7 +18,7 @@ class supportControllers{
             pray_id:id,
             user_id:req.user.id
         }
-
+        console.log(obj,"server add supoort");
         Supports.create(obj)
         .then(data=>{
             console.log(data,"---->>>?????");
