@@ -6,10 +6,10 @@
         <div>
             <img class="rounded float-left">
             <vue2Dropzone 
-            ref="myVueDropzone" 
-            id="dropzone" 
-            :options="dropzoneOptions"
-            @vdropzone-file-added = "fileAdded"
+                ref="myVueDropzone" 
+                id="dropzone" 
+                :options="dropzoneOptions"
+                @vdropzone-file-added = "fileAdded"
             ></vue2Dropzone>
         </div>
 
@@ -39,10 +39,14 @@
 </template>
 
 <script>
-import navbar from "../components/navbar"
-import vue2Dropzone from 'vue2-dropzone'
-import 'vue2-dropzone/dist/vue2Dropzone.min.css'
+import navbar from "../components/navbar";
+import vue2Dropzone from 'vue2-dropzone';
+import 'vue2-dropzone/dist/vue2Dropzone.min.css';
+import axios from "axios";
+const baseUrl = "http://localhost:3000"
 const token = localStorage.getItem("token");
+
+
 export default{
     components:{
         navbar,
@@ -57,7 +61,7 @@ export default{
                 churchForEdit : "",
                 dropzoneOptions: {
                     method: "PUT",
-                    url: "http://localhost:3000/profiles",
+                    url: "http://localhost:3000/profiles/image",
                     headers: {token},
                     thumbnailWidth: 150,
                     maxFilesize: 0.5,//mega bytes,
@@ -72,7 +76,23 @@ export default{
     },
     methods:{
         fileAdded(file){
-            console.log("success add file to drop zone",file,"--->");
+            // console.log("success add file to drop zone",file,"--->");
+            // console.log(this.$refs.myVueDropzone,"--------------->>>>>>>>>>>>>>>>>");
+            let formData = new FormData()
+            formData.append("avatar",file)
+            axios({
+                method: "PUT",
+                url: `${baseUrl}/profiles/image`,
+                data: formData,
+                headers: {token}
+            })
+            .then(resp=>{
+                console.log(resp,"sukses upload axios");
+            })
+            .catch(err=>{
+                console.log(err,"from state action get prays");
+            })
+
         },
         showEditModal(){
             this.$refs["edit-profile-modal"].show()

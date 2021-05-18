@@ -1,4 +1,5 @@
 const {Profiles} = require("../models");
+const serverUrl = require("../helper/serverUrl")
 
 class Controllers{
 
@@ -33,9 +34,24 @@ class Controllers{
         let obj = {
             name, date_of_birth, phone, address, church, avatar
         }
-        console.log(obj,"objk untuk update profile");
+        // console.log(obj,"objk untuk update profile");
         Profiles.update(obj,{where:{user_id:req.user.id}})
         .then(resp=>{
+            res.status(200).json(resp);
+        })
+        .catch(err=>{
+            res.status(500).json(err);
+        })
+    }
+
+    static image(req, res){
+        // console.log(req.file.path,"from ccontroller image");
+        let avatar = serverUrl + req.file.path
+        let obj = {avatar}
+        console.log(obj,"new link path",req.user.id);
+        Profiles.update(obj,{where:{user_id:req.user.id}})
+        .then(resp=>{
+            console.log(resp,"-----");
             res.status(200).json(resp);
         })
         .catch(err=>{

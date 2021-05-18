@@ -3,7 +3,7 @@
         <!-- card -->
         <div class="card" >
             <div class="img">
-            <!-- <div class="img" @click="getProfile(data.user_id)"> -->
+                <div class="img" @click="getProfile(data.user_id)" />
                 <b-avatar >
                 </b-avatar> 
         </div>
